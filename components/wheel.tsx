@@ -214,7 +214,7 @@ export const Wheel = ({ onThemeSelected }: WheelProps) => {
 
       <div className="bg-indigo-800 bg-opacity-90 rounded-xl p-6 md:p-8 w-full max-w-4xl mx-auto relative z-10 border border-indigo-600 shadow-xl">
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center uppercase tracking-wider">
-          DISOVER WHICH <span className="text-lime-400">BUZZLY</span> CHALLENGE YOU'LL TACKLE TODAY!
+          DISCOVER WHICH <span className="text-lime-400">BUZZLY</span> CHALLENGE YOU'LL TACKLE TODAY!
         </h1>
 
         <div className="bg-indigo-700 p-4 rounded-lg border-2 border-yellow-400 mb-8 text-center">
