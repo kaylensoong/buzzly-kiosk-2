@@ -223,7 +223,7 @@ export const Wheel = ({ onThemeSelected }: WheelProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
             <div className="bg-indigo-800 p-3 rounded-lg">
               <p className="text-yellow-400 font-bold">
-                Power Idea: $50 <span className="text-white text-sm">(3x to be claimed)</span>
+                Power Idea: $50 <span className="text-white text-sm">(2x to be claimed)</span>
               </p>
               <p className="text-white text-sm mt-1">
                 High-impact, meaningful, and solution-focused. May lead to real-world action or deeper support.

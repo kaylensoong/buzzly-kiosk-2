@@ -154,7 +154,7 @@ export const ChallengeSubmission = ({ personalityType, onSubmit }: ChallengeSubm
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-indigo-800 p-4 rounded-lg border border-yellow-400">
             <div className="text-yellow-400 font-bold text-lg mb-1">
-              Power Idea: $50 <span className="text-sm text-white">(3x to be claimed)</span>
+              Power Idea: $50 <span className="text-sm text-white">(2x to be claimed)</span>
             </div>
             <div className="text-sm">
               High-impact, meaningful, and solution-focused. May lead to real-world action or deeper support.

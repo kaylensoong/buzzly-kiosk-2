@@ -2,6 +2,8 @@
 
 import type React from "react"
 
+import { Resend } from 'resend';
+import BuzzlySignupEmail from '@/emails/buzzlysignupemail';
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,8 +32,9 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
     setIsValid(validateEmail(newEmail))
   }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (request: Request) => {
       console.log("Button Pressed")
+      
       if (isValid) {
         console.log("Is valid!")
         await fetch("api/save", {
@@ -43,6 +46,14 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
         })
     
         onSubmit({ email, phone })
+
+        await fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, phone }),
+        });
       }
     }
 
