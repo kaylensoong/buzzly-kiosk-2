@@ -32,11 +32,32 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
     setIsValid(validateEmail(newEmail))
   }
 
-    const handleSubmit = async (request: Request) => {
-      console.log("Button Pressed")
+const getLastIdeaFromCSV = async () => {
+  try {
+    const response = await fetch('/api/csv');
+    if (!response.ok) throw new Error('Failed to fetch last idea');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching last idea:', error);
+    return { personalityType: '', idea: '' };
+  }
+};
+
+  const handleSubmit = async () => {
+    console.log("Button Pressed")
+    
+    if (isValid) {
+      console.log("Is valid!")
       
-      if (isValid) {
-        console.log("Is valid!")
+      // Get the last idea from CSV
+      const { personalityType, idea } = await getLastIdeaFromCSV();
+      
+      // Debug: Log the CSV data to see what we got
+      console.log("CSV Data retrieved:", { personalityType, idea });
+      
+      // Save to local API (if it exists)
+      try {
         await fetch("api/save", {
           method: "POST",
           headers: {
@@ -44,9 +65,64 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
           },
           body: JSON.stringify({ email, phone }),
         })
-    
-        onSubmit({ email, phone })
+      } catch (error) {
+        console.log("Local API not available:", error);
+      }
+      
+      // Send to Google Apps Script using form submission
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://script.google.com/macros/s/AKfycbwJ1Ui_wjbhFjLRP66uj2WVOVllGOpX4gXqYTzwV57_E9v9ry54G0GI2qRzawRJC4Jq/exec';
+      form.target = '_blank'; // Optional: open in new tab
+      form.style.display = 'none';
 
+      // Add data as hidden inputs
+      const emailInput = document.createElement('input');
+      emailInput.type = 'hidden';
+      emailInput.name = 'email';
+      emailInput.value = email;
+
+      const phoneInput = document.createElement('input');
+      phoneInput.type = 'hidden';
+      phoneInput.name = 'phone';
+      phoneInput.value = phone;
+
+      const personalityInput = document.createElement('input');
+      personalityInput.type = 'hidden';
+      personalityInput.name = 'personalityType';
+      personalityInput.value = personalityType;
+
+      const ideaInput = document.createElement('input');
+      ideaInput.type = 'hidden';
+      ideaInput.name = 'idea';
+      ideaInput.value = idea;
+
+      // Debug: Log what we're sending
+      console.log("Sending form data:", {
+        email: email,
+        phone: phone,
+        personalityType: personalityType,
+        idea: idea
+      });
+
+      form.appendChild(emailInput);
+      form.appendChild(phoneInput);
+      form.appendChild(personalityInput);
+      form.appendChild(ideaInput);
+      document.body.appendChild(form);
+
+      // Submit the form
+      form.submit();
+
+      // Clean up
+      setTimeout(() => {
+        document.body.removeChild(form);
+      }, 100);
+      
+      onSubmit({ email, phone })
+
+      // Send email
+      try {
         await fetch('/api/send-email', {
           method: 'POST',
           headers: {
@@ -54,8 +130,11 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
           },
           body: JSON.stringify({ email, phone }),
         });
+      } catch (error) {
+        console.log("Email API not available:", error);
       }
     }
+  }
 
   return (
     <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">

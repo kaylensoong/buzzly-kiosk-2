@@ -87,21 +87,41 @@ export const ChallengeSubmission = ({ personalityType, onSubmit }: ChallengeSubm
 
   const ideaQuality = getIdeaQuality()
 
-  const handleSubmit = async () => {
-    if (idea.trim().length > 0) {
-      await fetch("/api/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          idea,
-          personalityType,
-        }),
-      })
-      onSubmit()
-    }
+const handleSubmit = async () => {
+  if (idea.trim().length > 0) {
+    // Create a hidden form
+
+    await fetch("api/save", {method: "POST",headers: {"Content-Type": "application/json",},body: JSON.stringify({ idea, personalityType }),})
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://script.google.com/macros/s/AKfycbwYA9_NokSOLfp3CZvxQmg7cAmXPaYvYCQPeG3Rc-rb0HumULaF5fcJtmmPuUsAKvcu/exec';
+    form.target = '_blank'; // Optional: open in new tab
+    form.style.display = 'none';
+
+    // Add data as hidden inputs
+    const ideaInput = document.createElement('input');
+    ideaInput.type = 'hidden';
+    ideaInput.name = 'idea';
+    ideaInput.value = idea;
+
+    const personalityInput = document.createElement('input');
+    personalityInput.type = 'hidden';
+    personalityInput.name = 'personalityType';
+    personalityInput.value = personalityType;
+
+    form.appendChild(ideaInput);
+    form.appendChild(personalityInput);
+    document.body.appendChild(form);
+
+    // Submit the form
+    form.submit();
+
+    // Clean up
+    document.body.removeChild(form);
+
+    onSubmit();
   }
+};
 
   return (
     <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">
