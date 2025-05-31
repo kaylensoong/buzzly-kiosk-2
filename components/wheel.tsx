@@ -9,7 +9,16 @@ interface WheelProps {
   onThemeSelected: (theme: Theme) => void
 }
 
-const themes: Theme[] = ["Food", "Water", "Energy", "Transportation", "Waste", "Buildings", "Nature", "Community"]
+const themes: Theme[] = [
+  "Buildings",
+  "Waste",
+  "Transportation",
+  "Energy",
+  "Water",
+  "Food",
+  "Community",
+  "Nature"
+]
 
 const themeColors = {
   Food: "#facc15", // yellow-400
@@ -110,11 +119,19 @@ export const Wheel = ({ onThemeSelected }: WheelProps) => {
 
     // Calculate which theme was selected based on final rotation
     setTimeout(() => {
-      const normalizedDegree = finalRotation % 360
-      const segmentSize = 360 / themes.length
-      // We need to adjust the index calculation because of how the wheel is drawn
-      const selectedIndex = Math.floor(((360 - normalizedDegree) % 360) / segmentSize)
-      const selected = themes[selectedIndex]
+      const normalizedDegree = finalRotation % 360;
+      const segmentSize = 360 / themes.length;
+
+      // Align 0° with the pointer (top of the wheel)
+      const pointerOffset = 0; // top of canvas = 270°
+      const adjustedDegree = (normalizedDegree + pointerOffset) % 360;
+
+      // Center the segment around the pointer
+      const centeredDegree = (adjustedDegree + segmentSize / 2) % 360;
+
+      const selectedIndex = Math.floor(centeredDegree / segmentSize);
+      const selected = themes[selectedIndex];
+      console.log({ normalizedDegree, adjustedDegree, selectedIndex, selected })
       setSelectedTheme(selected)
 
       setTimeout(() => {

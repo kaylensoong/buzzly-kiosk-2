@@ -95,7 +95,7 @@ const handleSubmit = async () => {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = 'https://script.google.com/macros/s/AKfycbwYA9_NokSOLfp3CZvxQmg7cAmXPaYvYCQPeG3Rc-rb0HumULaF5fcJtmmPuUsAKvcu/exec';
-    form.target = '_blank'; // Optional: open in new tab
+    form.target = 'hiddenFrame';
     form.style.display = 'none';
 
     // Add data as hidden inputs

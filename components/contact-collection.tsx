@@ -73,7 +73,7 @@ const getLastIdeaFromCSV = async () => {
       const form = document.createElement('form');
       form.method = 'POST';
       form.action = 'https://script.google.com/macros/s/AKfycbwJ1Ui_wjbhFjLRP66uj2WVOVllGOpX4gXqYTzwV57_E9v9ry54G0GI2qRzawRJC4Jq/exec';
-      form.target = '_blank'; // Optional: open in new tab
+      form.target = 'hiddenFrame';
       form.style.display = 'none';
 
       // Add data as hidden inputs
