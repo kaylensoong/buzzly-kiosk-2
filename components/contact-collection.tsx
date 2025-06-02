@@ -72,7 +72,7 @@ const getLastIdeaFromCSV = async () => {
       // Send to Google Apps Script using form submission
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = 'https://script.google.com/macros/s/AKfycbwJ1Ui_wjbhFjLRP66uj2WVOVllGOpX4gXqYTzwV57_E9v9ry54G0GI2qRzawRJC4Jq/exec';
+      form.action = 'https://script.google.com/macros/s/AKfycbx2Pqn2e_RKbdW2nk8cPIrAecQES08NqH5wkDx2AeaGcQ7UZ1X9n1vy90S3a8fbVIMz/exec';
       form.target = 'hiddenFrame';
       form.style.display = 'none';
 
@@ -124,11 +124,16 @@ const getLastIdeaFromCSV = async () => {
       // Send email
       try {
         await fetch('/api/send-email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, phone }),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          phone,
+          personalityType,
+          description: idea // assuming "idea" from CSV is the description
+          }),
         });
       } catch (error) {
         console.log("Email API not available:", error);

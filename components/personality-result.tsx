@@ -11,7 +11,7 @@ interface PersonalityResultProps {
   onContinue: () => void
 }
 
-// Personality descriptions
+// Updated Personality descriptions
 const personalityDescriptions: Record<
   PersonalityType,
   {
@@ -20,55 +20,55 @@ const personalityDescriptions: Record<
     icon: React.ReactNode
   }
 > = {
-  "Community Groundbreaker": {
+  "The Visionary": {
     description:
-      "You're a natural connector who brings people together to solve problems. You understand that climate solutions need community buy-in and participation.",
+      "You're a big-picture thinker, driven by possibility. You imagine bold futures and help others see the path forward.",
     strengths: [
-      "Building consensus and bringing diverse voices together",
-      "Creating inclusive solutions that work for everyone",
-      "Mobilizing community action and participation",
+      "Seeing opportunities where others see obstacles",
+      "Inspiring others with future-forward thinking",
+      "Driving momentum around long-term visions",
     ],
-    icon: <Sparkles className="w-12 h-12 text-pink-400" />,
+    icon: <Sparkles className="w-12 h-12 text-lime-400" />,
   },
-  "Eco Innovator": {
+  "The Connector": {
     description:
-      "You're a creative problem-solver who thinks outside the box. You see technological and design opportunities where others see challenges.",
+      "You thrive on building relationships and creating bridges. You believe in the power of collaboration to spark change.",
     strengths: [
-      "Developing new technologies and approaches",
-      "Finding efficient solutions to complex problems",
-      "Connecting ideas across different domains",
+      "Bringing people and ideas together",
+      "Fostering inclusive and supportive environments",
+      "Strengthening networks and communities",
     ],
-    icon: <Zap className="w-12 h-12 text-yellow-400" />,
+    icon: <Zap className="w-12 h-12 text-pink-400" />,
   },
-  "Urban Visionary": {
+  "The Analyst": {
     description:
-      "You see the big picture of how cities can transform to meet climate challenges. You understand systems and how to redesign them for sustainability.",
+      "You're detail-oriented and data-driven. You make sense of complex information to guide smart decision-making.",
     strengths: [
-      "Systems thinking and holistic approaches",
-      "Long-term planning and strategic vision",
-      "Integrating multiple solutions into cohesive plans",
+      "Breaking down problems with precision",
+      "Using data to uncover insights",
+      "Designing evidence-based solutions",
     ],
     icon: <Sparkles className="w-12 h-12 text-blue-400" />,
   },
-  "Resource Guardian": {
+  "The Creator": {
     description:
-      "You're focused on protecting and optimizing our precious resources. You understand efficiency and how to do more with less.",
+      "You're imaginative, expressive, and full of ideas. You use storytelling and design to make change compelling.",
     strengths: [
-      "Finding efficiencies and reducing waste",
-      "Protecting and conserving natural resources",
-      "Creating circular systems that reuse and recycle",
+      "Communicating with clarity and emotion",
+      "Designing engaging and impactful experiences",
+      "Turning ideas into tangible action",
     ],
-    icon: <Zap className="w-12 h-12 text-green-400" />,
+    icon: <Zap className="w-12 h-12 text-yellow-400" />,
   },
-  "Nature Advocate": {
+  "The Doer": {
     description:
-      "You understand the deep connection between human wellbeing and natural systems. You see nature-based solutions as key to addressing climate challenges.",
+      "You're practical, action-oriented, and always ready to get things done. You believe in learning by doing.",
     strengths: [
-      "Integrating natural systems into urban environments",
-      "Restoring ecosystems and biodiversity",
-      "Finding solutions that benefit both people and nature",
+      "Making plans real through action",
+      "Leading with reliability and determination",
+      "Taking initiative and adapting quickly",
     ],
-    icon: <Sparkles className="w-12 h-12 text-lime-400" />,
+    icon: <Sparkles className="w-12 h-12 text-green-400" />,
   },
 }
 
@@ -79,7 +79,7 @@ export const PersonalityResult = ({ personalityType, onContinue }: PersonalityRe
     <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">
       <div className="flex flex-col items-center mb-6">
         <div className="mb-4">{personality.icon}</div>
-        <h2 className="text-3xl md:text-4xl font-bold text-lime-400 text-center">You are a {personalityType}!</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-lime-400 text-center">You are {personalityType}!</h2>
       </div>
 
       <p className="text-xl mb-6 text-center">{personality.description}</p>

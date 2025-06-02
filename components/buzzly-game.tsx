@@ -15,11 +15,11 @@ export type GameStage = "wheel" | "popup" | "questions" | "personality" | "chall
 export type Theme = "Food" | "Water" | "Energy" | "Transportation" | "Waste" | "Buildings" | "Nature" | "Community"
 
 export type PersonalityType =
-  | "Community Groundbreaker"
-  | "Eco Innovator"
-  | "Urban Visionary"
-  | "Resource Guardian"
-  | "Nature Advocate"
+  | "The Visionary"         // Big-picture, idea-driven
+  | "The Connector"         // Empathetic, social, people-person
+  | "The Analyst"           // Logical, curious, detail-focused
+  | "The Creator"           // Imaginative, expressive
+  | "The Doer"              // Action-oriented, efficient
 
 export const BuzzlyGame = () => {
   const [stage, setStage] = useState<GameStage>("wheel")

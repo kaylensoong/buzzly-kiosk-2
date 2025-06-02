@@ -19,30 +19,30 @@ const challengesByPersonality: Record<
     description: string
   }
 > = {
-  "Community Groundbreaker": {
-    title: "Design a community climate action program",
+  "The Visionary": {
+    title: "Design a bold future for Auckland",
     description:
-      "How would you bring together diverse community members to take action on climate issues in Auckland? What activities, events, or platforms would you create to ensure everyone's voice is heard?",
+      "Propose a visionary idea for a climate-positive Auckland in 2040. What transformations would you lead in technology, society, or infrastructure to get there?",
   },
-  "Eco Innovator": {
-    title: "Create a tech solution for urban sustainability",
+  "The Connector": {
+    title: "Bring Aucklanders together for climate action",
     description:
-      "Design an app, device, or technology that could help Auckland residents reduce their environmental impact. How would it work and what problem would it solve?",
+      "Design an initiative that builds strong climate networks across Auckland. How would you connect people from different backgrounds to collaborate on sustainability?",
   },
-  "Urban Visionary": {
-    title: "Reimagine a neighborhood for climate resilience",
+  "The Analyst": {
+    title: "Uncover insights with climate data",
     description:
-      "Choose a neighborhood in Auckland and redesign it to be more climate-resilient. What changes would you make to buildings, streets, and public spaces?",
+      "Pick a climate issue in Auckland and explain how you'd use data to tackle it. What sources would you analyze, and how would your findings influence decision-making?",
   },
-  "Resource Guardian": {
-    title: "Design a zero-waste system",
+  "The Creator": {
+    title: "Tell a climate story that inspires",
     description:
-      "Create a plan for reducing waste in a specific sector (food, packaging, electronics, etc.) in Auckland. How would you change current practices to eliminate  packaging, electronics, etc.) in Auckland. How would you change current practices to eliminate waste and create a circular economy?",
+      "Develop a campaign, artwork, or performance that gets people to care about climate change in Auckland. How will your creative approach move people to act?",
   },
-  "Nature Advocate": {
-    title: "Integrate nature into urban infrastructure",
+  "The Doer": {
+    title: "Lead a hands-on climate project",
     description:
-      "Develop a proposal for integrating natural systems into Auckland's infrastructure. How could natural elements help with water management, temperature regulation, or air quality?",
+      "Come up with a practical project that tackles a local climate issue head-on. What would you do, who would you involve, and how would you make an immediate impact?",
   },
 }
 

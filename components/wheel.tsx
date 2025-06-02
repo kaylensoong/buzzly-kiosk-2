@@ -122,16 +122,36 @@ export const Wheel = ({ onThemeSelected }: WheelProps) => {
       const normalizedDegree = finalRotation % 360;
       const segmentSize = 360 / themes.length;
 
-      // Align 0° with the pointer (top of the wheel)
+      // Align 0° with the pointer (top of the wheel) 
       const pointerOffset = 0; // top of canvas = 270°
       const adjustedDegree = (normalizedDegree + pointerOffset) % 360;
 
       // Center the segment around the pointer
-      const centeredDegree = (adjustedDegree + segmentSize / 2) % 360;
+      const centeredDegree = adjustedDegree / segmentSize;
 
-      const selectedIndex = Math.floor(centeredDegree / segmentSize);
+      var selectedIndex = Math.floor(centeredDegree);
+      console.log({finalRotation, normalizedDegree, adjustedDegree, selectedIndex })
+      if (selectedIndex == 5) {
+        selectedIndex = 0;
+      } else if (selectedIndex == 4) {
+        selectedIndex = 1;
+      } else if (selectedIndex == 3) {
+        selectedIndex = 2;
+      } else if (selectedIndex == 2) {
+        selectedIndex = 3;
+      } else if (selectedIndex == 1) {
+        selectedIndex = 4;
+      } else if (selectedIndex == 0) {
+        selectedIndex = 5;
+      } else if (selectedIndex == 7) {
+        selectedIndex = 6;
+      } else if (selectedIndex == 6) {
+        selectedIndex = 7;
+      } else {
+        selectedIndex = 8;
+      }
       const selected = themes[selectedIndex];
-      console.log({ normalizedDegree, adjustedDegree, selectedIndex, selected })
+      console.log({finalRotation, normalizedDegree, adjustedDegree, selectedIndex, selected })
       setSelectedTheme(selected)
 
       setTimeout(() => {

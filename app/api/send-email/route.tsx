@@ -6,7 +6,7 @@ const resend = new Resend(process.env.RESEND_API_KEY); // 🔐 Use env var
 
 export async function POST(req: Request) {
   try {
-    const { email, phone } = await req.json();
+    const { email, phone, personalityType, description } = await req.json();
 
     // Optional: Save to DB here, if needed
 
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
       from: 'Buzzly <onboarding@resend.dev>',
       to: email,
       subject: 'Sign up to Buzzly.nz!',
-      react: <BuzzlySignupEmail />,
+      react: <BuzzlySignupEmail personalityType={personalityType} description={description} />,
     });
 
     console.log('Email sent:', data);
