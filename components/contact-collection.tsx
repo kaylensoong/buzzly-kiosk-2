@@ -2,7 +2,6 @@
 
 import type React from "react"
 
-import { Resend } from 'resend';
 import BuzzlySignupEmail from '@/emails/buzzlysignupemail';
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -44,86 +43,57 @@ const getLastIdeaFromCSV = async () => {
   }
 };
 
-  const handleSubmit = async () => {
-    console.log("Button Pressed")
+const handleSubmit = async () => {
+  console.log("Button Pressed")
+  
+  if (isValid) {
+    console.log("Is valid!")
     
-    if (isValid) {
-      console.log("Is valid!")
-      
-      // Get the last idea from CSV
-      const { personalityType, idea } = await getLastIdeaFromCSV();
-      
-      // Debug: Log the CSV data to see what we got
-      console.log("CSV Data retrieved:", { personalityType, idea });
-      
-      // Save to local API (if it exists)
-      try {
-        await fetch("api/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, phone }),
-        })
-      } catch (error) {
-        console.log("Local API not available:", error);
-      }
-      
-      // Send to Google Apps Script using form submission
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = 'https://script.google.com/macros/s/AKfycbx2Pqn2e_RKbdW2nk8cPIrAecQES08NqH5wkDx2AeaGcQ7UZ1X9n1vy90S3a8fbVIMz/exec';
-      form.target = 'hiddenFrame';
-      form.style.display = 'none';
+    // Get the last idea from CSV
+    const { personalityType, idea } = await getLastIdeaFromCSV();
+    
+    // Debug: Log the CSV data to see what we got
+    console.log("CSV Data retrieved:", { personalityType, idea });
+    
+    // Save to local API (if it exists)
+    try {
+      await fetch("api/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, phone }),
+      })
+    } catch (error) {
+      console.log("Local API not available:", error);
+    }
+    
+    // Send to Google Apps Script using fetch instead of form submission
+    try {
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('phone', phone);
+      formData.append('personalityType', personalityType);
+      formData.append('idea', idea);
 
-      // Add data as hidden inputs
-      const emailInput = document.createElement('input');
-      emailInput.type = 'hidden';
-      emailInput.name = 'email';
-      emailInput.value = email;
-
-      const phoneInput = document.createElement('input');
-      phoneInput.type = 'hidden';
-      phoneInput.name = 'phone';
-      phoneInput.value = phone;
-
-      const personalityInput = document.createElement('input');
-      personalityInput.type = 'hidden';
-      personalityInput.name = 'personalityType';
-      personalityInput.value = personalityType;
-
-      const ideaInput = document.createElement('input');
-      ideaInput.type = 'hidden';
-      ideaInput.name = 'idea';
-      ideaInput.value = idea;
-
-      // Debug: Log what we're sending
-      console.log("Sending form data:", {
-        email: email,
-        phone: phone,
-        personalityType: personalityType,
-        idea: idea
+      await fetch('https://script.google.com/macros/s/AKfycbx2Pqn2e_RKbdW2nk8cPIrAecQES08NqH5wkDx2AeaGcQ7UZ1X9n1vy90S3a8fbVIMz/exec', {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors' // Important: This prevents CORS issues but you won't get response data
       });
-
-      form.appendChild(emailInput);
-      form.appendChild(phoneInput);
-      form.appendChild(personalityInput);
-      form.appendChild(ideaInput);
-      document.body.appendChild(form);
-
-      // Submit the form
-      form.submit();
-
-      // Clean up
-      setTimeout(() => {
-        document.body.removeChild(form);
-      }, 100);
       
-      onSubmit({ email, phone })
+      console.log("Data sent to Google Apps Script");
+    } catch (error) {
+      console.log("Error sending to Google Apps Script:", error);
+    }
+    
+    // Call the onSubmit callback
+    onSubmit({ email, phone })
 
-      // Send email
-      try {
-        await fetch('/api/send-email', {
+    console.log("Attempting to send email...");
+    // Send email
+    try {
+      await fetch('/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,14 +102,14 @@ const getLastIdeaFromCSV = async () => {
           email,
           phone,
           personalityType,
-          description: idea // assuming "idea" from CSV is the description
-          }),
-        });
-      } catch (error) {
-        console.log("Email API not available:", error);
-      }
+          description: idea
+        }),
+      });
+    } catch (error) {
+      console.log("Email API not available:", error);
     }
   }
+}
 
   return (
     <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">

@@ -1,26 +1,46 @@
-import { Resend } from 'resend';
-import { NextResponse } from 'next/server';
-import BuzzlySignupEmail from '@/emails/buzzlysignupemail';
-
-const resend = new Resend(process.env.RESEND_API_KEY); // 🔐 Use env var
+// /app/api/send-email/route.ts
+import { NextResponse } from "next/server";
+import axios from "axios";
+import { renderSignupEmail } from "@/emails/renderEmail";
 
 export async function POST(req: Request) {
   try {
-    const { email, phone, personalityType, description } = await req.json();
+    console.log("📨 Request received to send email");
 
-    // Optional: Save to DB here, if needed
+    const { email, personalityType, description } = await req.json();
 
-    const data = await resend.emails.send({
-      from: 'Buzzly <onboarding@resend.dev>',
-      to: email,
-      subject: 'Sign up to Buzzly.nz!',
-      react: <BuzzlySignupEmail personalityType={personalityType} description={description} />,
-    });
+    if (!email || !personalityType || !description) {
+      return NextResponse.json(
+        { ok: false, message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
 
-    console.log('Email sent:', data);
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    return NextResponse.json({ success: false, error }, { status: 500 });
+    const htmlContent = renderSignupEmail(personalityType, description);
+
+    const response = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          email: "hello@buzzly.nz",
+          name: "Buzzly.nz",
+        },
+        to: [{ email }], // ✅ Brevo expects an array of objects
+        subject: "New Message from Give Us a Buzz Contact Form",
+        htmlContent,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY ?? "",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("✅ Email sent!", response.data);
+    return NextResponse.json({ ok: true });
+  } catch (error: any) {
+    console.error("❌ Error sending email:", error.response?.data || error.message);
+    return NextResponse.json({ ok: false, message: error.message }, { status: 500 });
   }
 }

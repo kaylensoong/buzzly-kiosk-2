@@ -87,15 +87,38 @@ export const ChallengeSubmission = ({ personalityType, onSubmit }: ChallengeSubm
 
   const ideaQuality = getIdeaQuality()
 
-const handleSubmit = async () => {
-  if (idea.trim().length > 0) {
-    // Create a hidden form
+  const handleSubmit = async () => {
+    if (idea.trim().length > 0) {
+      // Ensure hidden iframe exists
+      if (!document.getElementById('hiddenFrame')) {
+        const iframe = document.createElement('iframe');
+        iframe.id = 'hiddenFrame';
+        iframe.name = 'hiddenFrame';
+        iframe.style.display = 'none';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+      }
 
-    await fetch("api/save", {method: "POST",headers: {"Content-Type": "application/json",},body: JSON.stringify({ idea, personalityType }),})
-    const form = document.createElement('form');
+      // Save to local API
+      try {
+        await fetch("api/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idea, personalityType }),
+        });
+      } catch (error) {
+        console.log("Local API not available:", error);
+      }
+
+      // Create a hidden form
+  const form = document.createElement('form');
     form.method = 'POST';
     form.action = 'https://script.google.com/macros/s/AKfycbwYA9_NokSOLfp3CZvxQmg7cAmXPaYvYCQPeG3Rc-rb0HumULaF5fcJtmmPuUsAKvcu/exec';
-    form.target = 'hiddenFrame';
+    form.target = 'hiddenFrame'; // Target the hidden iframe
     form.style.display = 'none';
 
     // Add data as hidden inputs
@@ -113,12 +136,17 @@ const handleSubmit = async () => {
     form.appendChild(personalityInput);
     document.body.appendChild(form);
 
-    // Submit the form
+    // Submit the form (will load response in hidden iframe)
     form.submit();
 
-    // Clean up
-    document.body.removeChild(form);
+    // Clean up the form after submission (with delay to ensure submission completes)
+    setTimeout(() => {
+      if (document.body.contains(form)) {
+        document.body.removeChild(form);
+      }
+    }, 1000);
 
+    // Call the onSubmit callback
     onSubmit();
   }
 };
