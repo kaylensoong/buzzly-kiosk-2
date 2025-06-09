@@ -254,28 +254,6 @@ export const Wheel = ({ onThemeSelected }: WheelProps) => {
           DISCOVER WHICH <span className="text-lime-400">BUZZLY</span> CHALLENGE YOU'LL TACKLE TODAY!
         </h1>
 
-        <div className="bg-indigo-700 p-4 rounded-lg border-2 border-yellow-400 mb-8 text-center">
-          <p className="text-yellow-400 font-bold text-lg mb-1">Win Cash Prizes!</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-            <div className="bg-indigo-800 p-3 rounded-lg">
-              <p className="text-yellow-400 font-bold">
-                Power Idea: $50 <span className="text-white text-sm">(2x to be claimed)</span>
-              </p>
-              <p className="text-white text-sm mt-1">
-                High-impact, meaningful, and solution-focused. May lead to real-world action or deeper support.
-              </p>
-            </div>
-
-            <div className="bg-indigo-800 p-3 rounded-lg">
-              <p className="text-lime-400 font-bold">
-                Awesome Idea: $10 <span className="text-white text-sm">(5x to be claimed)</span>
-              </p>
-              <p className="text-white text-sm mt-1">Creative, fun, and inspiring. Gets praise and encouragement.</p>
-            </div>
-          </div>
-        </div>
-
         <div className="flex justify-center mb-4">
           <ArrowDown className="text-lime-400 w-12 h-12 animate-bounce" />
         </div>

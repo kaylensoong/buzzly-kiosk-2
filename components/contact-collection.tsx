@@ -1,8 +1,6 @@
 "use client"
 
 import type React from "react"
-
-import BuzzlySignupEmail from '@/emails/buzzlysignupemail';
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -31,85 +29,55 @@ export const ContactCollection = ({ onSubmit }: ContactCollectionProps) => {
     setIsValid(validateEmail(newEmail))
   }
 
-const getLastIdeaFromCSV = async () => {
-  try {
-    const response = await fetch('/api/csv');
-    if (!response.ok) throw new Error('Failed to fetch last idea');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching last idea:', error);
-    return { personalityType: '', idea: '' };
-  }
-};
-
-const handleSubmit = async () => {
-  console.log("Button Pressed")
-  
-  if (isValid) {
-    console.log("Is valid!")
-    
-    // Get the last idea from CSV
-    const { personalityType, idea } = await getLastIdeaFromCSV();
-    
-    // Debug: Log the CSV data to see what we got
-    console.log("CSV Data retrieved:", { personalityType, idea });
-    
-    // Save to local API (if it exists)
+  const getLastPersonality = async () => {
     try {
-      await fetch("api/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, phone }),
+      const response = await fetch('/api/csv')
+      if (!response.ok) throw new Error('Failed to fetch CSV')
+      const data = await response.json()
+      return data.personalityType
+    } catch (error) {
+      console.error('Error fetching personality type:', error)
+      return ''
+    }
+  }
+
+  const handleSubmit = async () => {
+    if (!isValid) return
+    console.log("Submitting...")
+
+    const personalityType = await getLastPersonality()
+    console.log("Latest Personality Type:", personalityType)
+
+    try {
+      // Step 1: Append personality type to Google Sheet
+      const formDataAppend = new FormData()
+      formDataAppend.append('personalityType', personalityType)
+      formDataAppend.append('action', 'append')
+
+      await fetch('https://script.google.com/macros/s/AKfycbwPhpue9JIu8EBVg4F1I5NydlnEbwsjDVR96_Jt5QI_FNv0GaNOucu1B_0QJ1LMk50/exec', {
+        method: 'POST',
+        body: formDataAppend,
+        mode: 'no-cors'
       })
-    } catch (error) {
-      console.log("Local API not available:", error);
-    }
-    
-    // Send to Google Apps Script using fetch instead of form submission
-    try {
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('phone', phone);
-      formData.append('personalityType', personalityType);
-      formData.append('idea', idea);
 
-      await fetch('https://script.google.com/macros/s/AKfycbx2Pqn2e_RKbdW2nk8cPIrAecQES08NqH5wkDx2AeaGcQ7UZ1X9n1vy90S3a8fbVIMz/exec', {
-        method: 'POST',
-        body: formData,
-        mode: 'no-cors' // Important: This prevents CORS issues but you won't get response data
-      });
-      
-      console.log("Data sent to Google Apps Script");
-    } catch (error) {
-      console.log("Error sending to Google Apps Script:", error);
-    }
-    
-    // Call the onSubmit callback
-    onSubmit({ email, phone })
+      // Step 2: Update the latest row with email and phone
+      const formDataUpdate = new FormData()
+      formDataUpdate.append('email', email)
+      formDataUpdate.append('phone', phone)
+      formDataUpdate.append('action', 'update')
 
-    console.log("Attempting to send email...");
-    // Send email
-    try {
-      await fetch('/api/send-email', {
+      await fetch('https://script.google.com/macros/s/AKfycbwPhpue9JIu8EBVg4F1I5NydlnEbwsjDVR96_Jt5QI_FNv0GaNOucu1B_0QJ1LMk50/exec', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          phone,
-          personalityType,
-          description: idea
-        }),
-      });
+        body: formDataUpdate,
+        mode: 'no-cors'
+      })
+
+      onSubmit({ email, phone })
+      console.log("Submission complete")
     } catch (error) {
-      console.log("Email API not available:", error);
+      console.error("Submission error:", error)
     }
   }
-}
 
   return (
     <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">
@@ -121,7 +89,7 @@ const handleSubmit = async () => {
 
       <div className="text-center mb-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">Almost there!</h2>
-        <p className="text-lg">Leave your contact details so we can notify you if you win and deliver your rewards!</p>
+        <p className="text-lg">Leave your contact details to receive the awards!</p>
       </div>
 
       <div className="bg-indigo-700 rounded-lg p-6 mb-8">
@@ -157,31 +125,11 @@ const handleSubmit = async () => {
           </div>
 
           <div className="flex flex-col items-center justify-center mt-6 space-y-2">
-          <div className="flex items-center">
-            <QrCode className="w-8 h-8 text-lime-400 mr-3" />
-            <p className="text-lime-300">Scan the QR code to sign up to gain the in-person awards!</p>
-          </div>
+            <div className="flex items-center">
+              <QrCode className="w-8 h-8 text-lime-400 mr-3" />
+              <p className="text-lime-300">Scan the QR code to sign up to gain the in-person awards!</p>
+            </div>
             <Image src={Frame} alt="QR Code" width={128} height={128} />
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-indigo-900 rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-bold mb-4 text-lime-400">What Previous Participants Say:</h3>
-        <div className="space-y-4">
-          <div className="bg-indigo-800 p-4 rounded-lg">
-            <p className="italic mb-2">
-              "I got my Buzzly badge instantly and was notified about my $50 win by email. The process was super
-              easy!"
-            </p>
-            <div className="text-right text-lime-300 text-sm">- Jade, 19</div>
-          </div>
-          <div className="bg-indigo-800 p-4 rounded-lg">
-            <p className="italic mb-2">
-              "They emailed me about a workshop related to my idea. I met other young people who care about the same
-              issues!"
-            </p>
-            <div className="text-right text-lime-300 text-sm">- Kahu, 16</div>
           </div>
         </div>
       </div>

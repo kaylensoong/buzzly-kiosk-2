@@ -55,22 +55,47 @@ export const RewardConfirmation = ({ onRestart }: RewardConfirmationProps) => {
         <p className="text-center text-lime-300">Winners announced within 2 weeks</p>
       </div>
 
+
       <div className="bg-indigo-900 rounded-lg p-6 mb-8">
         <h3 className="text-xl font-bold mb-4 flex items-center justify-center">
-          <Gift className="mr-2 text-yellow-400" /> Your Micro Rewards
+          <Gift className="mr-2 text-yellow-400" /> Buzzly Merch
         </h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-indigo-800 p-4 rounded-lg border border-lime-400 flex flex-col items-center">
-            <Sparkles className="text-lime-400 w-10 h-10 mb-2" />
-            <h4 className="font-bold text-lg mb-2">Mini Awards</h4>
-            <p className="text-center">Collect your Buzzly badge after completion!</p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="bg-indigo-800 p-3 rounded-lg border border-lime-400 flex flex-col items-center">
+            <Sparkles className="text-lime-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Buzzly Torch</h4>
+            <p className="text-center text-xs">Light up your ideas!</p>
           </div>
 
-          <div className="bg-indigo-800 p-4 rounded-lg border border-yellow-400 flex flex-col items-center">
-            <Zap className="text-yellow-400 w-10 h-10 mb-2" />
-            <h4 className="font-bold text-lg mb-2">Personality Card</h4>
-            <p className="text-center">Get your Buzzly Personality Card after completion!</p>
+          <div className="bg-indigo-800 p-3 rounded-lg border border-yellow-400 flex flex-col items-center">
+            <Zap className="text-yellow-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Puzzles</h4>
+            <p className="text-center text-xs">Challenge your mind!</p>
+          </div>
+
+          <div className="bg-indigo-800 p-3 rounded-lg border border-lime-400 flex flex-col items-center">
+            <Sparkles className="text-lime-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Maze Games</h4>
+            <p className="text-center text-xs">Navigate to solutions!</p>
+          </div>
+
+          <div className="bg-indigo-800 p-3 rounded-lg border border-yellow-400 flex flex-col items-center">
+            <Zap className="text-yellow-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Buzzly Bags</h4>
+            <p className="text-center text-xs">Carry your impact!</p>
+          </div>
+
+          <div className="bg-indigo-800 p-3 rounded-lg border border-lime-400 flex flex-col items-center">
+            <Sparkles className="text-lime-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Badges</h4>
+            <p className="text-center text-xs">Show your personality!</p>
+          </div>
+
+          <div className="bg-indigo-800 p-3 rounded-lg border border-yellow-400 flex flex-col items-center">
+            <Zap className="text-yellow-400 w-8 h-8 mb-2" />
+            <h4 className="font-bold text-sm mb-1">Stress Balls & Pens</h4>
+            <p className="text-center text-xs">Think and create!</p>
           </div>
         </div>
       </div>

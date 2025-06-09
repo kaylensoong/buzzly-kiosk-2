@@ -3,28 +3,31 @@
 import { useState } from "react"
 import { Wheel } from "@/components/wheel"
 import { WouldYouRather } from "@/components/would-you-rather"
+import { AnimalSelection } from "@/components/animal-selection"
 import { PersonalityResult } from "@/components/personality-result"
-import { ChallengeSubmission } from "@/components/challenge-submission"
 import { ContactCollection } from "@/components/contact-collection"
 import { RewardConfirmation } from "@/components/reward-confirmation"
 import { BuzzlyPopup } from "@/components/buzzly-popup"
 import { ConfettiEffect } from "@/components/confetti-effect"
 
-export type GameStage = "wheel" | "popup" | "questions" | "personality" | "challenge" | "contact" | "reward"
+export type GameStage = "wheel" | "popup" | "questions" | "animal" | "personality" | "contact" | "reward"
 
-export type Theme = "Food" | "Water" | "Energy" | "Transportation" | "Waste" | "Buildings" | "Nature" | "Community"
+export type Theme =
+  | "Food" | "Water" | "Energy" | "Transportation"
+  | "Waste" | "Buildings" | "Nature" | "Community"
 
 export type PersonalityType =
-  | "The Visionary"         // Big-picture, idea-driven
-  | "The Connector"         // Empathetic, social, people-person
-  | "The Analyst"           // Logical, curious, detail-focused
-  | "The Creator"           // Imaginative, expressive
-  | "The Doer"              // Action-oriented, efficient
+  | "The Visionary"
+  | "The Connector"
+  | "The Analyst"
+  | "The Creator"
+  | "The Doer"
 
 export const BuzzlyGame = () => {
   const [stage, setStage] = useState<GameStage>("wheel")
   const [selectedTheme, setSelectedTheme] = useState<Theme | null>(null)
   const [personalityType, setPersonalityType] = useState<PersonalityType | null>(null)
+  const [selectedAnimal, setSelectedAnimal] = useState<string | null>(null)
   const [showConfetti, setShowConfetti] = useState(false)
 
   const handleThemeSelected = (theme: Theme) => {
@@ -42,6 +45,11 @@ export const BuzzlyGame = () => {
 
   const handleQuestionsCompleted = (personality: PersonalityType) => {
     setPersonalityType(personality)
+    setStage("animal")
+  }
+
+  const handleAnimalSelected = (animalImage: string) => {
+    setSelectedAnimal(animalImage)
     setShowConfetti(true)
     setTimeout(() => {
       setShowConfetti(false)
@@ -50,10 +58,6 @@ export const BuzzlyGame = () => {
   }
 
   const handlePersonalityConfirmed = () => {
-    setStage("challenge")
-  }
-
-  const handleChallengeSubmitted = () => {
     setShowConfetti(true)
     setTimeout(() => {
       setShowConfetti(false)
@@ -69,6 +73,7 @@ export const BuzzlyGame = () => {
     setStage("wheel")
     setSelectedTheme(null)
     setPersonalityType(null)
+    setSelectedAnimal(null)
   }
 
   return (
@@ -83,12 +88,19 @@ export const BuzzlyGame = () => {
         <WouldYouRather theme={selectedTheme} onComplete={handleQuestionsCompleted} />
       )}
 
-      {stage === "personality" && personalityType && (
-        <PersonalityResult personalityType={personalityType} onContinue={handlePersonalityConfirmed} />
+      {stage === "animal" && personalityType && (
+        <AnimalSelection
+          personalityType={personalityType}
+          onAnimalSelected={handleAnimalSelected}
+        />
       )}
 
-      {stage === "challenge" && personalityType && (
-        <ChallengeSubmission personalityType={personalityType} onSubmit={handleChallengeSubmitted} />
+      {stage === "personality" && personalityType && (
+        <PersonalityResult
+          personalityType={personalityType}
+          selectedAnimal={selectedAnimal}
+          onContinue={handlePersonalityConfirmed}
+        />
       )}
 
       {stage === "contact" && <ContactCollection onSubmit={handleContactSubmitted} />}

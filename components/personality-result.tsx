@@ -5,9 +5,11 @@ import type React from "react"
 import { Button } from "@/components/ui/button"
 import type { PersonalityType } from "@/components/buzzly-game"
 import { Sparkles, Zap } from "lucide-react"
+import Image from "next/image"
 
 interface PersonalityResultProps {
   personalityType: PersonalityType
+  selectedAnimal: string
   onContinue: () => void
 }
 
@@ -72,30 +74,49 @@ const personalityDescriptions: Record<
   },
 }
 
-export const PersonalityResult = ({ personalityType, onContinue }: PersonalityResultProps) => {
+export const PersonalityResult = ({ personalityType, selectedAnimal, onContinue }: PersonalityResultProps) => {
   const personality = personalityDescriptions[personalityType]
 
   return (
-    <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-3xl mx-auto text-white">
+    <div className="bg-indigo-800 rounded-xl p-6 md:p-8 max-w-4xl mx-auto text-white">
       <div className="flex flex-col items-center mb-6">
         <div className="mb-4">{personality.icon}</div>
-        <h2 className="text-3xl md:text-4xl font-bold text-lime-400 text-center">You are {personalityType}!</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-lime-400 text-center">Your personality type is {personalityType}!</h2>
       </div>
 
       <p className="text-xl mb-6 text-center">{personality.description}</p>
 
       <div className="bg-indigo-700 rounded-lg p-6 mb-8">
-        <h3 className="text-xl font-bold mb-4 text-lime-300">Your Climate Leadership Strengths:</h3>
-        <ul className="space-y-3">
-          {personality.strengths.map((strength, index) => (
-            <li key={index} className="flex items-start">
-              <div className="w-6 h-6 rounded-full bg-lime-400 text-indigo-900 flex items-center justify-center font-bold mr-3 flex-shrink-0">
-                {index + 1}
-              </div>
-              <p className="text-lg">{strength}</p>
-            </li>
-          ))}
-        </ul>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Leadership Strengths - Left side */}
+          <div className="lg:col-span-2">
+            <h3 className="text-xl font-bold mb-4 text-lime-300">Your Leadership Strengths:</h3>
+            <ul className="space-y-3">
+              {personality.strengths.map((strength, index) => (
+                <li key={index} className="flex items-start">
+                  <div className="w-6 h-6 rounded-full bg-lime-400 text-indigo-900 flex items-center justify-center font-bold mr-3 flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <p className="text-lg">{strength}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Animal Avatar - Right side */}
+          <div className="flex flex-col items-center justify-center">
+            <div className="bg-indigo-800 rounded-lg p-4 border-2 border-lime-400">
+              <h4 className="text-center font-bold text-lime-300 mb-3">Your Avatar</h4>
+              <Image
+                src={selectedAnimal || "/placeholder.svg"}
+                alt="Selected Animal Avatar"
+                width={150}
+                height={150}
+                className="rounded-full mx-auto border-2 border-lime-400"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-center">
